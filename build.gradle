@@ -1,0 +1,59 @@
+
+buildscript {
+	ext {
+		springBootVersion = '2.1.8.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
+	}
+}
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.google.protobuf'
+
+group = 'com.grpc'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+protobuf {
+	generateProtoTasks.generatedFilesBaseDir = 'src'
+
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.0.0-alpha-3"
+	}
+
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.23.0'
+		}
+	}
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	compile group: 'io.grpc', name: 'grpc-all', version: '1.19.0'
+	compile "com.google.protobuf:protobuf-java:3.6.1"
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// https://mvnrepository.com/artifact/net.devh/grpc-server-spring-boot-autoconfigure
+	compile "io.github.lognet:grpc-spring-boot-starter:3.4.1"
+
+	runtime('mysql:mysql-connector-java')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+}
+

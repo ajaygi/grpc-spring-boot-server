@@ -21,12 +21,7 @@ public class UserService extends userImplBase {
      */
     @Override
     public void login(LoginRequest request, StreamObserver<Response> responseObserver) {
-//        super.login(request, responseObserver);
-
         LOGGER.info("Inside login method...");
-
-        System.out.println("Username :: " + request.getUsername());
-        System.out.println("Password :: " + request.getPassword());
 
         Response.Builder response = Response.newBuilder();
         response.setResult("Sucess....!");
